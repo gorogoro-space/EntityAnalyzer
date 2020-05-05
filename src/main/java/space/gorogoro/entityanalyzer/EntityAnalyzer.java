@@ -9,15 +9,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /*
@@ -37,37 +34,9 @@ public class EntityAnalyzer extends JavaPlugin {
     try{
       getLogger().log(Level.INFO, "The Plugin Has Been Enabled!");
 
-      Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-        public int limitEntity = 100;
-        public int detectChunkRange = 1;
-
-        @Override
-        public void run() {
-          for(World w: getServer().getWorlds()) {
-            for(Player p:w.getPlayers()) {
-              for(Chunk c: p.getWorld().getLoadedChunks()) {
-                if(c.getTileEntities().length < limitEntity && c.getEntities().length < limitEntity) {
-                  continue;
-                }
-
-                if(getDistance(p.getLocation().getChunk().getX(), p.getLocation().getChunk().getZ(), c.getX(), c.getZ()) > detectChunkRange) {
-                  continue;
-                }
-                p.sendMessage(ChatColor.DARK_GRAY + " " +  detectChunkRange + "チャンク以内にエンティティーが"+limitEntity+"以上のチャンクあります。ホッパー、チェスト、額縁等を分散するか整理をお願いします(x:"+c.getX()+",z:"+c.getZ()+")");
-              }
-            }
-          }
-
-        }
-      }, 0L, 100L);
-
     } catch (Exception e){
       EntityAnalyzerUtility.logStackTrace(e);
     }
-  }
-
-  public int getDistance(int x1, int y1, int x2, int y2) {
-    return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
   }
 
   /**
