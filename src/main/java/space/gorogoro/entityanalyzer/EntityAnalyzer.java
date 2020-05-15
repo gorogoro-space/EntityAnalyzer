@@ -7,14 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /*
@@ -26,17 +28,57 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class EntityAnalyzer extends JavaPlugin {
 
+  public Map<String, Long> checkedMap = new HashMap<>();
+
   /**
    * JavaPlugin method onEnable.
    */
   @Override
   public void onEnable(){
     try{
-      getLogger().log(Level.INFO, "The Plugin Has Been Enabled!");
+      getLogger().info("The Plugin Has Been Enabled!");
 
+      Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+        public int limitEntity = 100;
+        public int detectChunkRange = 1;
+
+        @Override
+        public void run() {
+          for(World w: getServer().getWorlds()) {
+            for(Player p:w.getPlayers()) {
+              for(Chunk c: p.getWorld().getLoadedChunks()) {
+                if(c.getTileEntities().length < limitEntity && c.getEntities().length < limitEntity) {
+                  continue;
+                }
+
+                if(getDistance(p.getLocation().getChunk().getX(), p.getLocation().getChunk().getZ(), c.getX(), c.getZ()) > detectChunkRange) {
+                  continue;
+                }
+
+                String checkedKey = c.getX() + "_" + c.getZ();
+                if( checkedMap.get(checkedKey) == null || System.currentTimeMillis() - checkedMap.get(checkedKey) > 60 * 60 * 1000d) { 
+                  String title = "注意";
+                  String subtitle = "多数のエンティティーを検知しました。(x:"+(c.getX() * 16)+",z:"+(c.getZ() * 16)+")";
+                  p.sendTitle(title, subtitle, 10, 300, 20);
+                  checkedMap.put(checkedKey, System.currentTimeMillis());
+                  String msg = " " + (detectChunkRange * 16) + "ブロック以内にエンティティーまたはタイルエンティティーが"+limitEntity+"以上のチャンクあります。ホッパー、チェスト、額縁等を分散するか整理をお願いします(x:"+(c.getX() * 16)+",z:"+(c.getZ() * 16)+")";
+                  p.sendMessage(ChatColor.DARK_GRAY + msg);
+                  getLogger().info(msg + " " + p.getName());
+                }
+              }
+            }
+          }
+
+        }
+      }, 0L, 100L);
+      
     } catch (Exception e){
       EntityAnalyzerUtility.logStackTrace(e);
     }
+  }
+
+  public int getDistance(int x1, int y1, int x2, int y2) {
+    return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
   }
 
   /**
@@ -44,7 +86,32 @@ public class EntityAnalyzer extends JavaPlugin {
    */
   public boolean onCommand( CommandSender sender, Command command, String label, String[] args) {
     try{
-      if( command.getName().equals("eawrank")) {
+      if( command.getName().equals("eatwrank")) {
+        Map<String, Integer> rank = new HashMap<>();
+        List<World> wlist = this.getServer().getWorlds();
+        for(World world: wlist) {
+          int cSize = 0;
+          for(Chunk c: world.getLoadedChunks()) {
+            cSize += c.getTileEntities().length;
+          }
+          rank.put(world.getName(), cSize);
+        }
+
+        // List 生成 (ソート用)
+        List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(rank.entrySet());
+        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
+          @Override
+          public int compare(
+            Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
+            return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
+          }
+        });
+
+        // 内容を表示
+        for (Entry<String,Integer> s : entries) {
+          EntityAnalyzerUtility.sendMessage(sender, "WORLD:" + s.getKey() + " ENTITY_COUNT:" + String.valueOf(s.getValue()));
+        }
+      } else if( command.getName().equals("eawrank")) {
 
         Map<String, Integer> rank = new HashMap<>();
         List<World> wlist = this.getServer().getWorlds();
@@ -207,13 +274,17 @@ public class EntityAnalyzer extends JavaPlugin {
     return false;
   }
 
+  public double getDistance(double x1, double z1, double x2, double z2) {
+    return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((z2 - z1), 2));
+  }
+
   /**
    * JavaPlugin method onDisable.
    */
   @Override
   public void onDisable(){
     try{
-      getLogger().log(Level.INFO, "The Plugin Has Been Disabled!");
+      getLogger().info("The Plugin Has Been Disabled!");
     } catch (Exception e){
       EntityAnalyzerUtility.logStackTrace(e);
     }
