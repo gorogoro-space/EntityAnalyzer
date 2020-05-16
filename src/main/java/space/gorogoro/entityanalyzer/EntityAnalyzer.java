@@ -130,7 +130,6 @@ public class EntityAnalyzer extends JavaPlugin {
 				for (Chunk c : clist) {
 					key = String.valueOf(c.getX() * 16) + "," + String.valueOf(c.getZ() * 16);
 					value = c.getEntities().length;
-
 					if (rank.get(key) != null) {
 						value = value + rank.get(key);
 					}
@@ -162,7 +161,6 @@ public class EntityAnalyzer extends JavaPlugin {
 				for (Chunk c : clist) {
 					key = String.valueOf(c.getX() * 16) + "," + String.valueOf(c.getZ() * 16);
 					value = c.getTileEntities().length;
-
 					if (rank.get(key) != null) {
 						value = value + rank.get(key);
 					}
