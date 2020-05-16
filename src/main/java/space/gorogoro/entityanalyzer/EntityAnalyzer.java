@@ -245,6 +245,10 @@ public class EntityAnalyzer extends JavaPlugin {
 				String dcr = config.getString("detect_chunk_range");
 				EntityAnalyzerUtility.sendMessage(sender, "Limit Entity: " + le + " Detect Chunk Range: " + dcr);
 			} else if (command.getName().equals("eanear")) {
+				if (!(sender instanceof Player)) {
+					EntityAnalyzerUtility.sendMessage(sender, "Console can't this command.");
+					return false;
+				}
 				FileConfiguration config = getConfig();
 				Integer limit_entity = config.getInt("limit_entity");
 				Integer detectChunkRange = config.getInt("detect_chunk_range");
