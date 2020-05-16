@@ -1,2 +1,0 @@
-# EntityAnalyzer
-EntityAnalyzer
