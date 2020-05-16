@@ -53,12 +53,10 @@ public class EntityAnalyzer extends JavaPlugin {
 								if (c.getTileEntities().length < limitEntity && c.getEntities().length < limitEntity) {
 									continue;
 								}
-
 								if (getDistance(p.getLocation().getChunk().getX(), p.getLocation().getChunk().getZ(),
 										c.getX(), c.getZ()) > detectChunkRange) {
 									continue;
 								}
-
 								String checkedKey = c.getX() + "_" + c.getZ();
 								if (checkedMap.get(checkedKey) == null
 										|| System.currentTimeMillis() - checkedMap.get(checkedKey) > 60 * 60 * 1000d) {
@@ -76,10 +74,8 @@ public class EntityAnalyzer extends JavaPlugin {
 							}
 						}
 					}
-
 				}
 			}, 0L, 100L);
-
 		} catch (Exception e) {
 			EntityAnalyzerUtility.logStackTrace(e);
 		}
@@ -100,26 +96,21 @@ public class EntityAnalyzer extends JavaPlugin {
 					}
 					rank.put(world.getName(), cSize);
 				}
-
 				// List 生成 (ソート用)
 				List<Map.Entry<String, Integer>> entries = getEntrySortedList(rank);
-
 				// 内容を表示
 				for (Entry<String, Integer> s : entries) {
 					EntityAnalyzerUtility.sendMessage(sender,
 							"WORLD:" + s.getKey() + " ENTITY_COUNT:" + String.valueOf(s.getValue()));
 				}
 			} else if (command.getName().equals("eawrank")) {
-
 				Map<String, Integer> rank = new HashMap<>();
 				List<World> wlist = this.getServer().getWorlds();
 				for (World world : wlist) {
 					rank.put(world.getName(), world.getEntities().size());
 				}
-
 				// List 生成 (ソート用)
 				List<Map.Entry<String, Integer>> entries = getEntrySortedList(rank);
-
 				// 内容を表示
 				for (Entry<String, Integer> s : entries) {
 					EntityAnalyzerUtility.sendMessage(sender,
@@ -127,11 +118,9 @@ public class EntityAnalyzer extends JavaPlugin {
 				}
 
 			} else if (command.getName().equals("earank")) {
-
 				if (args.length != 2) {
 					return false;
 				}
-
 				Integer limit = Integer.parseInt(args[1]);
 				Map<String, Integer> rank = new HashMap<>();
 				World world = getServer().getWorld(args[0]);
@@ -147,10 +136,8 @@ public class EntityAnalyzer extends JavaPlugin {
 					}
 					rank.put(key, value);
 				}
-
 				// List 生成 (ソート用)
 				List<Map.Entry<String, Integer>> entries = getEntrySortedList(rank);
-
 				// 内容を表示
 				EntityAnalyzerUtility.sendMessage(sender, "LOADED CHUNK COUNT:" + clist.length);
 				Integer n = 0;
@@ -163,11 +150,9 @@ public class EntityAnalyzer extends JavaPlugin {
 							"POSITION:" + s.getKey() + " ENTITY_COUNT:" + String.valueOf(s.getValue()));
 				}
 			} else if (command.getName().equals("eatrank")) {
-
 				if (args.length != 2) {
 					return false;
 				}
-
 				Integer limit = Integer.parseInt(args[1]);
 				Map<String, Integer> rank = new HashMap<>();
 				World world = getServer().getWorld(args[0]);
@@ -183,7 +168,6 @@ public class EntityAnalyzer extends JavaPlugin {
 					}
 					rank.put(key, value);
 				}
-
 				// List 生成 (ソート用)
 				List<Map.Entry<String, Integer>> entries = getEntrySortedList(rank);
 				// 内容を表示
@@ -198,11 +182,9 @@ public class EntityAnalyzer extends JavaPlugin {
 							"POSITION:" + s.getKey() + " TILE_ENTITY_COUNT:" + String.valueOf(s.getValue()));
 				}
 			} else if (command.getName().equals("eathrank")) {
-
 				if (args.length != 2) {
 					return false;
 				}
-
 				Integer limit = Integer.parseInt(args[1]);
 				Map<String, Integer> rank = new HashMap<>();
 				World world = getServer().getWorld(args[0]);
@@ -218,16 +200,13 @@ public class EntityAnalyzer extends JavaPlugin {
 						}
 					}
 					value = cntTe;
-
 					if (rank.get(key) != null) {
 						value = value + rank.get(key);
 					}
 					rank.put(key, value);
 				}
-
 				// List 生成 (ソート用)
 				List<Map.Entry<String, Integer>> entries = getEntrySortedList(rank);
-
 				// 内容を表示
 				EntityAnalyzerUtility.sendMessage(sender, "LOADED CHUNK COUNT:" + clist.length);
 				Integer n = 0;
@@ -257,12 +236,10 @@ public class EntityAnalyzer extends JavaPlugin {
 					if (c.getTileEntities().length < limit_entity && c.getEntities().length < limit_entity) {
 						continue;
 					}
-
 					if (getDistance(p.getLocation().getChunk().getX(), p.getLocation().getChunk().getZ(), c.getX(),
 							c.getZ()) > detectChunkRange) {
 						continue;
 					}
-
 					String title = "注意";
 					String subtitle = "多数のエンティティーを検知しました。(x:" + (c.getX() * 16) + ",z:" + (c.getZ() * 16) + ")";
 					p.sendTitle(title, subtitle, 10, 300, 20);
@@ -308,7 +285,6 @@ public class EntityAnalyzer extends JavaPlugin {
 					EntityAnalyzerUtility.sendMessage(sender, "Update Detect Chunk Range. -> (" + limit + ")");
 					config.set("detect_chunk_range", limit);
 				}
-
 				// コンフィグリロード
 				saveConfig();
 				reloadConfig();
