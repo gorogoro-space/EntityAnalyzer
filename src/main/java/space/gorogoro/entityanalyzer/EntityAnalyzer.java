@@ -85,10 +85,6 @@ public class EntityAnalyzer extends JavaPlugin {
 		}
 	}
 
-	public int getDistance(int x1, int y1, int x2, int y2) {
-		return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-	}
-
 	/**
 	 * JavaPlugin method onCommand.
 	 */
@@ -331,6 +327,10 @@ public class EntityAnalyzer extends JavaPlugin {
 			}
 		});
 		return entries;
+	}
+
+	public int getDistance(int x1, int y1, int x2, int y2) {
+		return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
 
 	public double getDistance(double x1, double z1, double x2, double z2) {
