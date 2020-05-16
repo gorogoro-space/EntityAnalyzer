@@ -269,8 +269,7 @@ public class EntityAnalyzer extends JavaPlugin {
 					getLogger().info(msg + " " + p.getName());
 				}
 			} else if (command.getName().equals("ealimitset")) {
-				Player p = (Player) sender;
-				if (!p.isOp()) {
+				if (!sender.isOp()) {
 					EntityAnalyzerUtility.sendMessage(sender, "権限がありません。");
 					return false;
 				}
