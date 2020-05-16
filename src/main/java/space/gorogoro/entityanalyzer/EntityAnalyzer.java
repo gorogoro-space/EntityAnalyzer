@@ -101,14 +101,7 @@ public class EntityAnalyzer extends JavaPlugin {
         }
 
         // List 生成 (ソート用)
-        List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(rank.entrySet());
-        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
-          @Override
-          public int compare(
-            Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
-            return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
-          }
-        });
+        List<Map.Entry<String,Integer>> entries = getEntrySortedList(rank);
 
         // 内容を表示
         for (Entry<String,Integer> s : entries) {
@@ -123,14 +116,7 @@ public class EntityAnalyzer extends JavaPlugin {
         }
 
         // List 生成 (ソート用)
-        List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(rank.entrySet());
-        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
-          @Override
-          public int compare(
-            Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
-            return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
-          }
-        });
+        List<Map.Entry<String,Integer>> entries = getEntrySortedList(rank);
 
         // 内容を表示
         for (Entry<String,Integer> s : entries) {
@@ -160,14 +146,7 @@ public class EntityAnalyzer extends JavaPlugin {
         }
 
         // List 生成 (ソート用)
-        List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(rank.entrySet());
-        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
-          @Override
-          public int compare(
-            Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
-            return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
-          }
-        });
+        List<Map.Entry<String,Integer>> entries = getEntrySortedList(rank);
 
         // 内容を表示
         EntityAnalyzerUtility.sendMessage(sender, "LOADED CHUNK COUNT:" + clist.length);
@@ -202,15 +181,7 @@ public class EntityAnalyzer extends JavaPlugin {
         }
 
         // List 生成 (ソート用)
-        List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(rank.entrySet());
-        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
-          @Override
-          public int compare(
-            Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
-            return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
-          }
-        });
-
+        List<Map.Entry<String,Integer>> entries = getEntrySortedList(rank);
         // 内容を表示
         EntityAnalyzerUtility.sendMessage(sender, "LOADED CHUNK COUNT:" + clist.length);
         Integer n=0;
@@ -250,14 +221,7 @@ public class EntityAnalyzer extends JavaPlugin {
         }
 
         // List 生成 (ソート用)
-        List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(rank.entrySet());
-        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
-          @Override
-          public int compare(
-            Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
-            return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
-          }
-        });
+        List<Map.Entry<String,Integer>> entries = getEntrySortedList(rank);
 
         // 内容を表示
         EntityAnalyzerUtility.sendMessage(sender, "LOADED CHUNK COUNT:" + clist.length);
@@ -344,6 +308,18 @@ public class EntityAnalyzer extends JavaPlugin {
       EntityAnalyzerUtility.logStackTrace(e);
     }
     return false;
+  }
+
+  public List<Map.Entry<String,Integer>> getEntrySortedList(Map<String, Integer> rank){
+	  List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(rank.entrySet());
+      Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
+        @Override
+        public int compare(
+          Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
+          return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
+        }
+      });
+      return entries;
   }
 
   public double getDistance(double x1, double z1, double x2, double z2) {
