@@ -222,6 +222,10 @@ public class EntityAnalyzer extends JavaPlugin {
 				String dcr = config.getString("detect_chunk_range");
 				EntityAnalyzerUtility.sendMessage(sender, "Limit Entity: " + le + " Detect Chunk Range: " + dcr);
 			} else if (command.getName().equals("eanear")) {
+				if (!sender.isOp()) {
+					EntityAnalyzerUtility.sendMessage(sender, "権限がありません。");
+					return false;
+				}
 				if (!(sender instanceof Player)) {
 					EntityAnalyzerUtility.sendMessage(sender, "Console can't this command.");
 					return false;
