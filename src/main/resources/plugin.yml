@@ -22,3 +22,12 @@ commands:
   eathrank:
     description: Ranking Tile Hopper
     usage: /<command> <world_name> <limit>
+  ealimits:
+    description: Show Chank Entity Limits
+    usage: /<command> <world_name> <limit>
+  ealimitset:
+    description: Set Entity/Chank Limits
+    usage: /<command> <world_name string> <limit int>
+  eanear:
+    description: Check Near Chunk
+    usage: /<command>

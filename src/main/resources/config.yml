@@ -1,0 +1,5 @@
+# http://mcstats.org
+limit_entity: 50
+detect_chunk_range: 1
+lower_limit_entity: 30
+upper_limit_detect_chunk_range: 10
