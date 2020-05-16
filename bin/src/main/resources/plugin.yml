@@ -1,0 +1,24 @@
+name: EntityAnalyzer
+version: 1.2
+api-version: 1.15
+description: EntityAnalyzer
+author: kubotan
+website: https://gorogoro.space/
+main: space.gorogoro.entityanalyzer.EntityAnalyzer
+
+commands:
+  eatwrank:
+    description: Ranking world tile entities
+    usage: /<command>
+  eawrank:
+    description: Ranking world entities
+    usage: /<command>
+  earank:
+    description: Ranking Entity
+    usage: /<command> <world_name> <limit>
+  eatrank:
+    description: Ranking Tile All
+    usage: /<command> <world_name> <limit>
+  eathrank:
+    description: Ranking Tile Hopper
+    usage: /<command> <world_name> <limit>

@@ -18,6 +18,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /*
  * EntityAnalyzer
@@ -35,11 +36,13 @@ public class EntityAnalyzer extends JavaPlugin {
    */
   @Override
   public void onEnable(){
+	// read config.yml
+	FileConfiguration config = getConfig();
     try{
       getLogger().info("The Plugin Has Been Enabled!");
-
       Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-        public int limitEntity = 100;
+        // public int limitEntity = 100;
+        public int limitEntity = config.getInt("limitentity");
         public int detectChunkRange = 1;
 
         @Override
@@ -56,7 +59,7 @@ public class EntityAnalyzer extends JavaPlugin {
                 }
 
                 String checkedKey = c.getX() + "_" + c.getZ();
-                if( checkedMap.get(checkedKey) == null || System.currentTimeMillis() - checkedMap.get(checkedKey) > 60 * 60 * 1000d) { 
+                if( checkedMap.get(checkedKey) == null || System.currentTimeMillis() - checkedMap.get(checkedKey) > 60 * 60 * 1000d) {
                   String title = "注意";
                   String subtitle = "多数のエンティティーを検知しました。(x:"+(c.getX() * 16)+",z:"+(c.getZ() * 16)+")";
                   p.sendTitle(title, subtitle, 10, 300, 20);
@@ -71,7 +74,7 @@ public class EntityAnalyzer extends JavaPlugin {
 
         }
       }, 0L, 100L);
-      
+
     } catch (Exception e){
       EntityAnalyzerUtility.logStackTrace(e);
     }
