@@ -36,14 +36,14 @@ public class EntityAnalyzer extends JavaPlugin {
    */
   @Override
   public void onEnable(){
-	// read config.yml
-	FileConfiguration config = getConfig();
+    // read config.yml
+    FileConfiguration config = getConfig();
     try{
       getLogger().info("The Plugin Has Been Enabled!");
       Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
         // public int limitEntity = 100;
-        public int limitEntity = config.getInt("limitentity");
-        public int detectChunkRange = 1;
+    	public int limitEntity = config.getInt("limit_entity");
+        public int detectChunkRange = config.getInt("detect_chunk_range");
 
         @Override
         public void run() {
@@ -269,6 +269,12 @@ public class EntityAnalyzer extends JavaPlugin {
           }
           EntityAnalyzerUtility.sendMessage(sender, "POSITION:" + s.getKey() + " TILE_ENTITY_COUNT:" + String.valueOf(s.getValue()));
         }
+      }
+      else if( command.getName().equals("ealimits")) {
+    	  FileConfiguration config = getConfig();
+    	  String le = config.getString("limit_entity");
+    	  String dcr = config.getString("detect_chunk_range");
+    	  EntityAnalyzerUtility.sendMessage(sender, "Limit Entity: " + le + " Detect Chunk Range: " + dcr);
       }
       return true;
     }catch(Exception e){

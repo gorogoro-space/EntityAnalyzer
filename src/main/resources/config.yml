@@ -1,2 +1,3 @@
 # http://mcstats.org
-limitentity: 30
+limit_entity: 30
+detect_chunk_range: 1
