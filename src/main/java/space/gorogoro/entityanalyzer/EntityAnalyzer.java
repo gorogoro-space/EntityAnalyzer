@@ -37,8 +37,6 @@ public class EntityAnalyzer extends JavaPlugin {
    */
   @Override
   public void onEnable() {
-    // read config.yml
-    FileConfiguration config = getConfig();
     try {
       getLogger().info("The Plugin Has Been Enabled!");
 
@@ -52,19 +50,19 @@ public class EntityAnalyzer extends JavaPlugin {
       }
 
       Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-        public int limitEntity = config.getInt("limit_entity");
-        public int detectChunkRange = config.getInt("detect_chunk_range");
-
         @Override
         public void run() {
+          if(!getConfig().getBoolean("notice")) {
+            return;
+          }
           for (World w : getServer().getWorlds()) {
             for (Player p : w.getPlayers()) {
               for (Chunk c : p.getWorld().getLoadedChunks()) {
-                if (c.getTileEntities().length < limitEntity && c.getEntities().length < limitEntity) {
+                if (c.getTileEntities().length < getConfig().getInt("limit_entity") && c.getEntities().length < getConfig().getInt("limit_entity")) {
                   continue;
                 }
                 if (getDistance(p.getLocation().getChunk().getX(), p.getLocation().getChunk().getZ(),
-                    c.getX(), c.getZ()) > detectChunkRange) {
+                    c.getX(), c.getZ()) > getConfig().getInt("detect_chunk_range")) {
                   continue;
                 }
                 String checkedKey = c.getX() + "_" + c.getZ();
@@ -75,8 +73,8 @@ public class EntityAnalyzer extends JavaPlugin {
                       + (c.getZ() * 16) + ")";
                   p.sendTitle(title, subtitle, 10, 300, 20);
                   checkedMap.put(checkedKey, System.currentTimeMillis());
-                  String msg = " " + (detectChunkRange * 16) + "ブロック以内にエンティティーまたはタイルエンティティーが"
-                      + limitEntity + "以上のチャンクあります。ホッパー、チェスト、額縁等を分散するか整理をお願いします(x:"
+                  String msg = " " + (getConfig().getInt("detect_chunk_range") * 16) + "ブロック以内にエンティティーまたはタイルエンティティーが"
+                      + getConfig().getInt("limit_entity") + "以上のチャンクあります。ホッパー、チェスト、額縁等を分散するか整理をお願いします(x:"
                       + (c.getX() * 16) + ",z:" + (c.getZ() * 16) + ")";
                   p.sendMessage(ChatColor.DARK_GRAY + msg);
                   getLogger().info(msg + " " + p.getName());
@@ -85,7 +83,7 @@ public class EntityAnalyzer extends JavaPlugin {
             }
           }
         }
-      }, 0L, 100L);
+      }, 0L, 20L);
     } catch (Exception e) {
       EntityAnalyzerUtility.logStackTrace(e);
     }
