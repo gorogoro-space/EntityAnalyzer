@@ -17,6 +17,7 @@ import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -94,7 +95,60 @@ public class EntityAnalyzer extends JavaPlugin {
    */
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     try {
-      if (command.getName().equals("eatwrank")) {
+      if (command.getName().equals("eastatus")) {
+        if (!sender.isOp()) {
+          EntityAnalyzerUtility.sendMessage(sender, "権限がありません。");
+          return false;
+        }
+
+        Map<String, Integer> erank = new HashMap<>();
+        Map<String, Integer> trank = new HashMap<>();
+        for (World world : getServer().getWorlds()) {
+
+          // 全エンティティー類を取得
+          for (Chunk c : world.getLoadedChunks()) {
+            // エンティティー種類ごとのカウント
+            for (Entity e: c.getEntities()) {
+              String key = e.getType().toString();
+              if(!erank.containsKey(key)) {
+                erank.put(key, 0);
+              }
+              int cnt = erank.get(key);
+              cnt++;
+              erank.put(key, cnt);
+            }
+
+            // タイルエンティティー種類ごとのカウント
+            for (BlockState t: c.getTileEntities()) {
+              String key = t.getType().toString();
+              if(!trank.containsKey(key)) {
+                trank.put(key, 0);
+              }
+              int cnt = trank.get(key);
+              cnt++;
+              trank.put(key,  cnt);
+            }
+          }
+
+          // エンティティー結果表示
+          EntityAnalyzerUtility.sendMessage(sender, "========== Entity Type Rank WORLD:" + world.getName() + " ==========");
+          getServer().getLogger().info("========== Entity Type Rank WORLD:" + world.getName() + " ==========");
+          for (Entry<String, Integer> s : getEntrySortedList(erank)) {
+            String emsg = "  ENTITY:" + s.getKey() + " COUNT:" + String.valueOf(s.getValue());
+            EntityAnalyzerUtility.sendMessage(sender, emsg);
+            getServer().getLogger().info(emsg);
+          }
+
+          // タイルエンティティー結果表示
+          EntityAnalyzerUtility.sendMessage(sender, "========== TileEntity Type Rank WORLD:" + world.getName() + " ==========");
+          getServer().getLogger().info("========== TileEntity Type Rank WORLD:" + world.getName() + " ==========");
+          for (Entry<String, Integer> s : getEntrySortedList(trank)) {
+            String tmsg = "  TILE_ENTITY:" + s.getKey() + " COUNT:" + String.valueOf(s.getValue());
+            EntityAnalyzerUtility.sendMessage(sender, tmsg);
+            getServer().getLogger().info(tmsg);
+          }
+        }
+      } else if (command.getName().equals("eatwrank")) {
         Map<String, Integer> rank = new HashMap<>();
         List<World> wlist = this.getServer().getWorlds();
         for (World world : wlist) {
