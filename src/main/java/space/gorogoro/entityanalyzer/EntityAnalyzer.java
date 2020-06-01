@@ -101,9 +101,9 @@ public class EntityAnalyzer extends JavaPlugin {
           return false;
         }
 
-        Map<String, Integer> erank = new HashMap<>();
-        Map<String, Integer> trank = new HashMap<>();
         for (World world : getServer().getWorlds()) {
+          Map<String, Integer> erank = new HashMap<>();
+          Map<String, Integer> trank = new HashMap<>();
 
           // 全エンティティー類を取得
           for (Chunk c : world.getLoadedChunks()) {
