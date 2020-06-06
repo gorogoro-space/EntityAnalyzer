@@ -9,7 +9,7 @@ main: space.gorogoro.entityanalyzer.EntityAnalyzer
 commands:
   eastatus:
     description: Ranking world entities type
-    usage: /<command>
+    usage: /<command> [<world_name>] [<entity_name>]
   eatwrank:
     description: Ranking world tile entities
     usage: /<command>
