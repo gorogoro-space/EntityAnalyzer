@@ -137,22 +137,32 @@ public class EntityAnalyzer extends JavaPlugin {
               }
             }
 
+            int printNum = 0;
             // エンティティー結果表示
             EntityAnalyzerUtility.sendMessage(sender, "========== Entity Type Rank WORLD:" + world.getName() + " ==========");
             getServer().getLogger().info("========== Entity Type Rank WORLD:" + world.getName() + " ==========");
             for (Entry<String, Integer> s : getEntrySortedList(erank)) {
+              printNum++;
               String emsg = "  ENTITY:" + s.getKey() + " COUNT:" + String.valueOf(s.getValue());
               EntityAnalyzerUtility.sendMessage(sender, emsg);
               getServer().getLogger().info(emsg);
+              if(printNum >= 10) {
+                break;
+              }
             }
 
+            printNum = 0;
             // タイルエンティティー結果表示
             EntityAnalyzerUtility.sendMessage(sender, "========== TileEntity Type Rank WORLD:" + world.getName() + " ==========");
             getServer().getLogger().info("========== TileEntity Type Rank WORLD:" + world.getName() + " ==========");
             for (Entry<String, Integer> s : getEntrySortedList(trank)) {
+              printNum++;
               String tmsg = "  TILE_ENTITY:" + s.getKey() + " COUNT:" + String.valueOf(s.getValue());
               EntityAnalyzerUtility.sendMessage(sender, tmsg);
               getServer().getLogger().info(tmsg);
+              if(printNum >= 10) {
+                break;
+              }
             }
           }
         } else {
@@ -189,6 +199,7 @@ public class EntityAnalyzer extends JavaPlugin {
             trank.put(key, trank.get(key) + tcnt);
           }
 
+          int printNum = 0;
           List<Map.Entry<String, Integer>> eresult = getEntrySortedList(erank);
           int esum = 0;
           for (Entry<String, Integer> s : eresult) {
@@ -197,8 +208,13 @@ public class EntityAnalyzer extends JavaPlugin {
             }
             getServer().getLogger().info("POSITION:" + s.getKey() + " ENTITY_COUNT:" + String.valueOf(s.getValue()));
             esum = esum + s.getValue();
+            printNum++;
+            if(printNum >= 10) {
+              break;
+            }
           }
 
+          printNum = 0;
           List<Map.Entry<String, Integer>> tresult = getEntrySortedList(trank);
           int tsum = 0;
           for (Entry<String, Integer> s : tresult) {
@@ -207,6 +223,10 @@ public class EntityAnalyzer extends JavaPlugin {
             }
             getServer().getLogger().info("POSITION:" + s.getKey() + " TILE_ENTITY_COUNT:" + String.valueOf(s.getValue()));
             tsum = tsum + s.getValue();
+            printNum++;
+            if(printNum >= 10) {
+              break;
+            }
           }
           getServer().getLogger().info("esum:" + String.valueOf(esum) + " tsum:" + String.valueOf(tsum));
         }
