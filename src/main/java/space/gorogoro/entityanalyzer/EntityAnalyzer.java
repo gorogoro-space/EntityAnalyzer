@@ -139,8 +139,9 @@ public class EntityAnalyzer extends JavaPlugin {
 
             int printNum = 0;
             // エンティティー結果表示
-            EntityAnalyzerUtility.sendMessage(sender, "========== Entity Type Rank WORLD:" + world.getName() + " ==========");
-            getServer().getLogger().info("========== Entity Type Rank WORLD:" + world.getName() + " ==========");
+            String msg = "========== Entity Type Rank WORLD:" + world.getName() + " ==========";
+            EntityAnalyzerUtility.sendMessage(sender, msg);
+            getServer().getLogger().info(msg);
             for (Entry<String, Integer> s : getEntrySortedList(erank)) {
               printNum++;
               String emsg = "  ENTITY:" + s.getKey() + " COUNT:" + String.valueOf(s.getValue());
@@ -153,8 +154,9 @@ public class EntityAnalyzer extends JavaPlugin {
 
             printNum = 0;
             // タイルエンティティー結果表示
-            EntityAnalyzerUtility.sendMessage(sender, "========== TileEntity Type Rank WORLD:" + world.getName() + " ==========");
-            getServer().getLogger().info("========== TileEntity Type Rank WORLD:" + world.getName() + " ==========");
+            msg = "========== TileEntity Type Rank WORLD:" + world.getName() + " ==========";
+            EntityAnalyzerUtility.sendMessage(sender, msg);
+            getServer().getLogger().info(msg);
             for (Entry<String, Integer> s : getEntrySortedList(trank)) {
               printNum++;
               String tmsg = "  TILE_ENTITY:" + s.getKey() + " COUNT:" + String.valueOf(s.getValue());
@@ -164,6 +166,9 @@ public class EntityAnalyzer extends JavaPlugin {
                 break;
               }
             }
+
+            EntityAnalyzerUtility.sendMessage(sender, "========================================================================");
+            getServer().getLogger().info("========================================================================");
           }
         } else {
           World world = getServer().getWorld(args[0]);
@@ -200,13 +205,17 @@ public class EntityAnalyzer extends JavaPlugin {
           }
 
           int printNum = 0;
+          String msg = "========== Entity Type Rank TYPE:" + target + " ==========";
+          EntityAnalyzerUtility.sendMessage(sender, msg);
           List<Map.Entry<String, Integer>> eresult = getEntrySortedList(erank);
           int esum = 0;
           for (Entry<String, Integer> s : eresult) {
             if(s.getValue() <= 0) {
               continue;
             }
-            getServer().getLogger().info("POSITION:" + s.getKey() + " ENTITY_COUNT:" + String.valueOf(s.getValue()));
+            msg = "  POSITION:" + s.getKey() + " ENTITY_COUNT:" + String.valueOf(s.getValue());
+            getServer().getLogger().info(msg);
+            EntityAnalyzerUtility.sendMessage(sender, msg);
             esum = esum + s.getValue();
             printNum++;
             if(printNum >= 10) {
@@ -221,14 +230,18 @@ public class EntityAnalyzer extends JavaPlugin {
             if(s.getValue() <= 0) {
               continue;
             }
-            getServer().getLogger().info("POSITION:" + s.getKey() + " TILE_ENTITY_COUNT:" + String.valueOf(s.getValue()));
+            msg = "  POSITION:" + s.getKey() + " TILE_ENTITY_COUNT:" + String.valueOf(s.getValue());
+            getServer().getLogger().info(msg);
+            EntityAnalyzerUtility.sendMessage(sender, msg);
             tsum = tsum + s.getValue();
             printNum++;
             if(printNum >= 10) {
               break;
             }
           }
-          getServer().getLogger().info("esum:" + String.valueOf(esum) + " tsum:" + String.valueOf(tsum));
+          msg = "esum:" + String.valueOf(esum) + " tsum:" + String.valueOf(tsum);
+          getServer().getLogger().info(msg);
+          EntityAnalyzerUtility.sendMessage(sender, msg);
         }
       } else if (command.getName().equals("eatwrank")) {
         Map<String, Integer> rank = new HashMap<>();
