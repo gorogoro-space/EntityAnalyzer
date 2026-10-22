@@ -55,6 +55,7 @@ Please place the .jar file in the Paper plugins folder.
 | 項目 | 内容 |
 |---|---|
 | `notice` | `true` にすると、エンティティーが多いチャンクの近くにいるプレイヤーに注意を出します(同じチャンクについては 1 時間に 1 回) |
+| `notice_interval_seconds` | 注意を出すために調べる間隔(秒)。既定は 1 |
 | `limit_entity` | 注意を出す基準。チャンク内のエンティティーかタイルエンティティーがこの数以上 |
 | `detect_chunk_range` | プレイヤーから何チャンク以内を調べるか |
 | `lower_limit_entity` | `/ealimitset limit` で設定できる最小値 |

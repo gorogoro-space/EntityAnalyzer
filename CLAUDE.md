@@ -55,7 +55,7 @@
 
 (現在の実装の動作。仕様を変えたらここを更新する)
 
-- **起動時(`onEnable`)**: `config.yml` が無ければ jar 内のものを保存する。1 秒(20 tick)ごとの定期タスクを登録する
+- **起動時(`onEnable`)**: `config.yml` が無ければ jar 内のものを保存する。`notice_interval_seconds` 秒(既定 1。1 未満は 1)ごとの定期タスクを登録する(`startNoticeTask`。2.2 で config 化。それまでは 20 tick 固定)
 - **定期タスク(注意)**: `notice: true` のときだけ動く。全ワールドの各プレイヤーについて、プレイヤーのいるチャンクから `detect_chunk_range` チャンク以内(チャンク座標の距離を整数に切り捨てて判定)の読み込まれているチャンクだけを調べ(`getNearbyCrowdedChunks`。読み込まれていないチャンクは読み込まない)、エンティティーかタイルエンティティーが `limit_entity` 以上のチャンクがあれば、タイトル「注意」とメッセージを出し、ログにも出す(1.5 までは全チャンクを調べてから距離で絞っていた)
   - 同じチャンク(キーは `ワールド名_x_z`)については 1 時間に 1 回だけ出す。記録はメモリ上(`checkedMap`)で、1 時間を過ぎたものは定期タスクの最初に消す(2.0 でワールドを区別し、古い記録を消すようにした)
 - **チャンクの位置の表示**: チャンク座標 × 16(チャンクの北西の角のブロック座標)
@@ -68,7 +68,7 @@
   - `/ealimits` — `limit_entity` と `detect_chunk_range` を表示する
   - `/ealimitset limit|chunk <value>`(OP) — `limit_entity`(`lower_limit_entity` 以上)/ `detect_chunk_range`(`upper_limit_detect_chunk_range` 以下)を変更し、`config.yml` に保存して読み直す
   - `/eanear`(OP・プレイヤーのみ) — 定期タスクと同じ判定(`getNearbyCrowdedChunks`)を自分の周りで行い、注意を出す(1 時間に 1 回の制限なし)
-  - `/eareload`(OP・コンソール) — `config.yml` を読み直し、「config.yml を読み直しました。」を出す。実行中の集計は、開始時の `scan_time_per_tick_ms` のまま続く
+  - `/eareload`(OP・コンソール) — `config.yml` を読み直し、定期タスクを新しい間隔で登録し直して、「config.yml を読み直しました。」を出す。実行中の集計は、開始時の `scan_time_per_tick_ms` のまま続く
 - **全チャンクの集計(`/eastatus`・`/earank`・`/eatrank`・`/eathrank`)**(2.0 で追加)
   - 実行時に読み込み済みチャンクの一覧を作り、`ChunkScanTask` が 1 tick に `scan_time_per_tick_ms` ミリ秒(既定 2)まで数えて(最低 1 チャンク)、続きは次の tick に回す。途中でアンロードされたチャンクは飛ばす。数え終わったら結果を表示する
   - 開始時に「集計を始めました。結果が出るまでお待ちください。」を出す

@@ -40,6 +40,9 @@ public class EntityAnalyzer extends JavaPlugin {
 
   public Map<String, Long> checkedMap = new HashMap<>();
 
+  // 定期の注意のタスク ID(未登録なら -1)
+  private int noticeTaskId = -1;
+
   // 実行中の集計(サーバー全体で 1 つまで)
   private ChunkScanTask runningScan = null;
   // 集計を実行した人ごとの、次に実行できる時刻
@@ -62,41 +65,52 @@ public class EntityAnalyzer extends JavaPlugin {
         saveDefaultConfig();
       }
 
-      Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-        @Override
-        public void run() {
-          if(!getConfig().getBoolean("notice")) {
-            return;
-          }
-          // 1 時間を過ぎた記録は消す
-          long now = System.currentTimeMillis();
-          checkedMap.values().removeIf(t -> now - t > 60 * 60 * 1000L);
-          for (World w : getServer().getWorlds()) {
-            for (Player p : w.getPlayers()) {
-              for (Chunk c : getNearbyCrowdedChunks(p, getConfig().getInt("limit_entity"),
-                  getConfig().getInt("detect_chunk_range"))) {
-                String checkedKey = c.getWorld().getName() + "_" + c.getX() + "_" + c.getZ();
-                if (checkedMap.get(checkedKey) == null) {
-                  String title = "注意";
-                  String subtitle = "多数のエンティティーを検知しました。(x:" + (c.getX() * 16) + ",z:"
-                      + (c.getZ() * 16) + ")";
-                  p.showTitle(Title.title(Component.text(title), Component.text(subtitle),
-                      Title.Times.times(Ticks.duration(10), Ticks.duration(300), Ticks.duration(20))));
-                  checkedMap.put(checkedKey, System.currentTimeMillis());
-                  String msg = " " + (getConfig().getInt("detect_chunk_range") * 16) + "ブロック以内にエンティティーまたはタイルエンティティーが"
-                      + getConfig().getInt("limit_entity") + "以上のチャンクあります。ホッパー、チェスト、額縁等を分散するか整理をお願いします(x:"
-                      + (c.getX() * 16) + ",z:" + (c.getZ() * 16) + ")";
-                  p.sendMessage(Component.text(msg, NamedTextColor.DARK_GRAY));
-                  getLogger().info(msg + " " + p.getName());
-                }
+      startNoticeTask();
+    } catch (Exception e) {
+      EntityAnalyzerUtility.logStackTrace(e);
+    }
+  }
+
+  /**
+   * 定期の注意を notice_interval_seconds 秒(1 未満なら 1)ごとに動かす。登録済みなら止めてから登録し直す。
+   */
+  private void startNoticeTask() {
+    if (noticeTaskId != -1) {
+      Bukkit.getScheduler().cancelTask(noticeTaskId);
+    }
+    long interval = Math.max(1L, getConfig().getLong("notice_interval_seconds")) * 20L;
+    noticeTaskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+      @Override
+      public void run() {
+        if(!getConfig().getBoolean("notice")) {
+          return;
+        }
+        // 1 時間を過ぎた記録は消す
+        long now = System.currentTimeMillis();
+        checkedMap.values().removeIf(t -> now - t > 60 * 60 * 1000L);
+        for (World w : getServer().getWorlds()) {
+          for (Player p : w.getPlayers()) {
+            for (Chunk c : getNearbyCrowdedChunks(p, getConfig().getInt("limit_entity"),
+                getConfig().getInt("detect_chunk_range"))) {
+              String checkedKey = c.getWorld().getName() + "_" + c.getX() + "_" + c.getZ();
+              if (checkedMap.get(checkedKey) == null) {
+                String title = "注意";
+                String subtitle = "多数のエンティティーを検知しました。(x:" + (c.getX() * 16) + ",z:"
+                    + (c.getZ() * 16) + ")";
+                p.showTitle(Title.title(Component.text(title), Component.text(subtitle),
+                    Title.Times.times(Ticks.duration(10), Ticks.duration(300), Ticks.duration(20))));
+                checkedMap.put(checkedKey, System.currentTimeMillis());
+                String msg = " " + (getConfig().getInt("detect_chunk_range") * 16) + "ブロック以内にエンティティーまたはタイルエンティティーが"
+                    + getConfig().getInt("limit_entity") + "以上のチャンクあります。ホッパー、チェスト、額縁等を分散するか整理をお願いします(x:"
+                    + (c.getX() * 16) + ",z:" + (c.getZ() * 16) + ")";
+                p.sendMessage(Component.text(msg, NamedTextColor.DARK_GRAY));
+                getLogger().info(msg + " " + p.getName());
               }
             }
           }
         }
-      }, 0L, 20L);
-    } catch (Exception e) {
-      EntityAnalyzerUtility.logStackTrace(e);
-    }
+      }
+    }, 0L, interval);
   }
 
   /**
@@ -328,6 +342,8 @@ public class EntityAnalyzer extends JavaPlugin {
           return false;
         }
         reloadConfig();
+        // 定期の注意の間隔を反映する
+        startNoticeTask();
         EntityAnalyzerUtility.sendMessage(sender, "config.yml を読み直しました。");
       } else if (command.getName().equals("ealimitset")) {
         if (!sender.isOp()) {
