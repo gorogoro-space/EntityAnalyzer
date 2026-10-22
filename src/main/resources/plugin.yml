@@ -1,6 +1,6 @@
 name: EntityAnalyzer
-version: 1.5
-api-version: 1.15
+version: '${version}'
+api-version: '1.21.11'
 description: EntityAnalyzer
 author: kubotan
 website: https://www.gorogoro.space/
