@@ -68,6 +68,7 @@
   - `/ealimits` — `limit_entity` と `detect_chunk_range` を表示する
   - `/ealimitset limit|chunk <value>`(OP) — `limit_entity`(`lower_limit_entity` 以上)/ `detect_chunk_range`(`upper_limit_detect_chunk_range` 以下)を変更し、`config.yml` に保存して読み直す
   - `/eanear`(OP・プレイヤーのみ) — 定期タスクと同じ判定(`getNearbyCrowdedChunks`)を自分の周りで行い、注意を出す(1 時間に 1 回の制限なし)
+  - `/eareload`(OP・コンソール) — `config.yml` を読み直し、「config.yml を読み直しました。」を出す。実行中の集計は、開始時の `scan_time_per_tick_ms` のまま続く
 - **全チャンクの集計(`/eastatus`・`/earank`・`/eatrank`・`/eathrank`)**(2.0 で追加)
   - 実行時に読み込み済みチャンクの一覧を作り、`ChunkScanTask` が 1 tick に `scan_time_per_tick_ms` ミリ秒(既定 2)まで数えて(最低 1 チャンク)、続きは次の tick に回す。途中でアンロードされたチャンクは飛ばす。数え終わったら結果を表示する
   - 開始時に「集計を始めました。結果が出るまでお待ちください。」を出す

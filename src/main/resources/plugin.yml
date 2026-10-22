@@ -34,3 +34,6 @@ commands:
   eanear:
     description: Check Near Chunk
     usage: /<command>
+  eareload:
+    description: Reload config.yml
+    usage: /<command>

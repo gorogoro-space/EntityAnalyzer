@@ -28,6 +28,7 @@ Please place the .jar file in the Paper plugins folder.
 /ealimits
 /ealimitset <limit|chunk> <value>
 /eanear
+/eareload
 ```
 
 - `/eastatus`(OP) — ワールドごとに、エンティティーとタイルエンティティーの数が多い種類を上位 10 件表示します。ワールドを指定するとそのワールドだけを表示します
@@ -39,6 +40,7 @@ Please place the .jar file in the Paper plugins folder.
   - `limit` — `limit_entity` を変更します(`lower_limit_entity` 未満にはできません)
   - `chunk` — `detect_chunk_range` を変更します(`upper_limit_detect_chunk_range` より大きくはできません)
 - `/eanear`(OP・プレイヤーのみ) — 自分の周りに、エンティティーが多いチャンクがあるか調べます
+- `/eareload`(OP) — config.yml を読み直します
 
 チャンクの位置は、チャンクの北西の角のブロック座標(x,z)で表示します。
 
@@ -60,7 +62,7 @@ Please place the .jar file in the Paper plugins folder.
 | `scan_time_per_tick_ms` | `/eastatus` などで、1 tick に数えるのに使う時間(ミリ秒)。小さいほどサーバーへの影響は小さく、結果が出るまでは長くなります |
 | `scan_cooldown_seconds` | `/eastatus` などを実行した人が、結果が出てから再び実行できるまでの秒数 |
 
-config.yml を書き換えたら、サーバーを再起動してください。
+config.yml を書き換えたら、`/eareload` を実行するか、サーバーを再起動してください。
 
 # Disclaimer
 Do not assume any responsibility by use. Please use it at your own risk.

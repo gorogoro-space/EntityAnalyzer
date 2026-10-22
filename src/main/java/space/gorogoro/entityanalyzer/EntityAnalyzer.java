@@ -322,6 +322,13 @@ public class EntityAnalyzer extends JavaPlugin {
           p.sendMessage(Component.text(msg, NamedTextColor.DARK_GRAY));
           getLogger().info(msg + " " + p.getName());
         }
+      } else if (command.getName().equals("eareload")) {
+        if (!sender.isOp()) {
+          EntityAnalyzerUtility.sendMessage(sender, "権限がありません。");
+          return false;
+        }
+        reloadConfig();
+        EntityAnalyzerUtility.sendMessage(sender, "config.yml を読み直しました。");
       } else if (command.getName().equals("ealimitset")) {
         if (!sender.isOp()) {
           EntityAnalyzerUtility.sendMessage(sender, "権限がありません。");
