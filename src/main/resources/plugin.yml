@@ -3,7 +3,7 @@ version: '${version}'
 api-version: '1.21.11'
 description: EntityAnalyzer
 author: kubotan
-website: https://www.gorogoro.space/
+website: https://github.com/gorogoro-space/EntityAnalyzer
 main: space.gorogoro.entityanalyzer.EntityAnalyzer
 
 commands:
