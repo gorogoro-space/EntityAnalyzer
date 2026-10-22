@@ -3,3 +3,5 @@ limit_entity: 100
 detect_chunk_range: 1
 lower_limit_entity: 30
 upper_limit_detect_chunk_range: 10
+scan_time_per_tick_ms: 2
+scan_cooldown_seconds: 30

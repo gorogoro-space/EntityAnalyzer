@@ -4,9 +4,11 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.logging.Level;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /*
  * EntityAnalyzerUtility
@@ -35,6 +37,11 @@ public class EntityAnalyzerUtility {
    * @param String message
    */
   public static void sendMessage(CommandSender sender, String message){
-    sender.sendMessage((Object)ChatColor.DARK_RED + "[EntityAnalyzer]" + " " + (Object)ChatColor.RED + message);
+    // 集計の結果が出る前にログアウトしたプレイヤーには送らない
+    if (sender instanceof Player && !((Player) sender).isOnline()) {
+      return;
+    }
+    sender.sendMessage(Component.text("[EntityAnalyzer]", NamedTextColor.DARK_RED)
+        .append(Component.text(" " + message, NamedTextColor.RED)));
   }
 }
